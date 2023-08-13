@@ -3005,6 +3005,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ffmpeg/ffmpeg@npm:*":
+  version: 0.12.4
+  resolution: "@ffmpeg/ffmpeg@npm:0.12.4"
+  dependencies:
+    "@ffmpeg/types": ^0.12.0
+  checksum: 34a6155f51372ce38f3f7496596c1e1f1fc9d0fc36f20bca256d085bc2a70c5639b769e2a986556bc3aa84cd237be73a4cdffa592b4f22301a4bd863a0499a8f
+  languageName: node
+  linkType: hard
+
+"@ffmpeg/types@npm:^0.12.0":
+  version: 0.12.0
+  resolution: "@ffmpeg/types@npm:0.12.0"
+  checksum: 6d8261ba56e3406b4424e70bf709a2dac76252d4353f11998dd32f8acb247df4db2c9ca1f9a1ee860a97e6e959244f811a9159f6307af10ffbf71a35ffdcc979
+  languageName: node
+  linkType: hard
+
+"@ffmpeg/util@npm:*":
+  version: 0.12.0
+  resolution: "@ffmpeg/util@npm:0.12.0"
+  checksum: 7cc6ba61f1dfe104b3a28475b4020486aaa7ff16f54eb67d7ed67286a40257a0d5b8569fc3aa732c14915be913d8a4e7d3ee042703beb55598bfa1364df87056
+  languageName: node
+  linkType: hard
+
 "@gar/promisify@npm:^1.0.1":
   version: 1.1.2
   resolution: "@gar/promisify@npm:1.1.2"
@@ -8330,6 +8353,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "frontend-starter@workspace:."
   dependencies:
+    "@ffmpeg/ffmpeg": "*"
+    "@ffmpeg/util": "*"
     "@preact/preset-vite": ^2.5.0
     "@tailwindcss/typography": ^0.5.9
     "@types/node": ^20.4.5
