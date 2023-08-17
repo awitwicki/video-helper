@@ -3005,6 +3005,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ffmpeg/core@npm:*":
+  version: 0.12.2
+  resolution: "@ffmpeg/core@npm:0.12.2"
+  checksum: c902a35aa671632a376e12b63e0c5ef74a47710771e90823acc235b8d1b6854659b3bde8173a17e6d34f9242b26b9acf5eaf0629e8ebd17ec3ff8a79987e97e6
+  languageName: node
+  linkType: hard
+
 "@ffmpeg/ffmpeg@npm:*":
   version: 0.12.4
   resolution: "@ffmpeg/ffmpeg@npm:0.12.4"
@@ -8353,6 +8360,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "frontend-starter@workspace:."
   dependencies:
+    "@ffmpeg/core": "*"
     "@ffmpeg/ffmpeg": "*"
     "@ffmpeg/util": "*"
     "@preact/preset-vite": ^2.5.0

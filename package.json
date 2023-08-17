@@ -10,12 +10,13 @@
     "preview": "yarn build && yarn vite preview"
   },
   "dependencies": {
+    "@ffmpeg/core": "*",
+    "@ffmpeg/ffmpeg": "*",
+    "@ffmpeg/util": "*",
     "jotai": "^2.2.2",
     "preact": "^10.16.0"
   },
   "devDependencies": {
-    "@ffmpeg/ffmpeg": "*",
-    "@ffmpeg/util": "*",
     "@preact/preset-vite": "^2.5.0",
     "@tailwindcss/typography": "^0.5.9",
     "@types/node": "^20.4.5",
