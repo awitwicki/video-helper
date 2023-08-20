@@ -1,26 +1,19 @@
 // import 'src/components/App.css'
-import { FFmpeg } from '@ffmpeg/ffmpeg'
 import {useEffect, useRef} from "preact/compat";
 import {useState} from "react";
+import {useAtom} from "jotai";
+import { FFmpeg } from '@ffmpeg/ffmpeg'
 import {fetchFile, toBlobURL} from "@ffmpeg/util";
-import Select, {ActionMeta, SingleValue} from 'react-select';
+
+import {settingsAtom} from "../atoms/exportSettings";
 
 function FFmpegComponent() {
   const [input, setInput] = useState<File | null>(null);
   const [output, setOutput] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
   const ffmpegRef = useRef(new FFmpeg());
-
-  let selectedOption: string 
   
-  const options: { value: string; label: string }[] = [
-    { value: 'mp4', label: 'mp4' },
-    { value: 'avi', label: 'avi' }
-  ];
-
-  const handleFileOutputTypeChange = (newValue: SingleValue<string>, actionMeta: ActionMeta<string>) => {
-    selectedOption = newValue.value;
-  };
+  const [fileType] = useAtom(settingsAtom);
   
   const load = async () => {
     const ffmpeg = ffmpegRef.current;
@@ -65,7 +58,7 @@ function FFmpegComponent() {
     try {
       const ffmpeg = ffmpegRef.current;
       await ffmpeg.writeFile('input.avi', await fetchFile(input))
-      const outputFilename = `output.${selectedOption}`
+      const outputFilename = `output.${fileType}`
       console.log(outputFilename)
       await ffmpeg.exec(['-i', 'input.avi', outputFilename])
       const outputData = await ffmpeg.readFile(outputFilename)
@@ -100,14 +93,6 @@ function FFmpegComponent() {
               onChange={handleFileChange} />
         </div>
         <br/>
-        <div className="my-4">
-          <Select
-              defaultValue={selectedOption}
-              onChange={handleFileOutputTypeChange}
-              options={options}
-              defaultValue={options[0]}
-          />
-        </div>
         {input && <button class="btn" onClick={transcode}>Transcode to mp4</button>}
         {output && <video controls src={output}/>}
       </>
