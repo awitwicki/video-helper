@@ -14,7 +14,8 @@
     "@ffmpeg/ffmpeg": "*",
     "@ffmpeg/util": "*",
     "jotai": "^2.2.2",
-    "preact": "^10.16.0"
+    "preact": "^10.16.0",
+    "react-select": "^5.7.4"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.5.0",

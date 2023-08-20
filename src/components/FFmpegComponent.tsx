@@ -3,6 +3,7 @@ import { FFmpeg } from '@ffmpeg/ffmpeg'
 import {useEffect, useRef} from "preact/compat";
 import {useState} from "react";
 import {fetchFile, toBlobURL} from "@ffmpeg/util";
+import Select, {ActionMeta, SingleValue} from 'react-select';
 
 function FFmpegComponent() {
   const [input, setInput] = useState<File | null>(null);
@@ -10,6 +11,17 @@ function FFmpegComponent() {
   const [loaded, setLoaded] = useState(false);
   const ffmpegRef = useRef(new FFmpeg());
 
+  let selectedOption: string 
+  
+  const options: { value: string; label: string }[] = [
+    { value: 'mp4', label: 'mp4' },
+    { value: 'avi', label: 'avi' }
+  ];
+
+  const handleFileOutputTypeChange = (newValue: SingleValue<string>, actionMeta: ActionMeta<string>) => {
+    selectedOption = newValue.value;
+  };
+  
   const load = async () => {
     const ffmpeg = ffmpegRef.current;
     ffmpeg.on("log", ({message}) => {
@@ -53,8 +65,10 @@ function FFmpegComponent() {
     try {
       const ffmpeg = ffmpegRef.current;
       await ffmpeg.writeFile('input.avi', await fetchFile(input))
-      await ffmpeg.exec(['-i', 'input.avi', 'output.mp4'])
-      const outputData = await ffmpeg.readFile('output.mp4')
+      const outputFilename = `output.${selectedOption}`
+      console.log(outputFilename)
+      await ffmpeg.exec(['-i', 'input.avi', outputFilename])
+      const outputData = await ffmpeg.readFile(outputFilename)
 
       // Convert Uint8Array to Blob and create a URL for the video
       const outputBlob = new Blob([outputData], {type: 'video/mp4'});
@@ -86,6 +100,14 @@ function FFmpegComponent() {
               onChange={handleFileChange} />
         </div>
         <br/>
+        <div className="my-4">
+          <Select
+              defaultValue={selectedOption}
+              onChange={handleFileOutputTypeChange}
+              options={options}
+              defaultValue={options[0]}
+          />
+        </div>
         {input && <button class="btn" onClick={transcode}>Transcode to mp4</button>}
         {output && <video controls src={output}/>}
       </>
