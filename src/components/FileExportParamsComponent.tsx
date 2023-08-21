@@ -1,25 +1,16 @@
-import {useAtom} from "jotai";
+import { useAtom } from "jotai";
 import Select from 'react-select';
 import { settingsAtom } from '../atoms/exportSettings';
-import {useEffect} from "react";
+import { FileFormatOptions } from "../helpers/FileFormatOptions";
+import { ExportSettings } from "../models/ExportSettings";
 
 function FileExportParamsComponent() {
-  
-  const fileFormatOptions: { value: string; label: string }[] = [
-    { value: 'mp4', label: 'mp4' },
-    { value: 'avi', label: 'avi' }
-  ];
-
   const [, setValue] = useAtom(settingsAtom);
   
   const handleFileOutputTypeChange = (newValue: { value: string; label: string }, actionMeta: any) => {
-    setValue(newValue.value)
+    const newSettings = new ExportSettings(newValue.value)
+    setValue(newSettings)
   };
-
-  useEffect(() => {
-    setValue(fileFormatOptions[0].value)
-  }, [])
-
 
   return (
       <>
@@ -28,9 +19,9 @@ function FileExportParamsComponent() {
             Select File format
           </label>
           <Select
-              defaultValue={fileFormatOptions[0]}
+              defaultValue={FileFormatOptions[0]}
               onChange={handleFileOutputTypeChange}
-              options={fileFormatOptions}
+              options={FileFormatOptions}
           />
         </div>
       </>)

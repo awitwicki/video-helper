@@ -13,7 +13,7 @@ function FFmpegComponent() {
   const [loaded, setLoaded] = useState(false);
   const ffmpegRef = useRef(new FFmpeg());
   
-  const [fileType] = useAtom(settingsAtom);
+  const [settings] = useAtom(settingsAtom);
   
   const load = async () => {
     const ffmpeg = ffmpegRef.current;
@@ -58,7 +58,7 @@ function FFmpegComponent() {
     try {
       const ffmpeg = ffmpegRef.current;
       await ffmpeg.writeFile('input.avi', await fetchFile(input))
-      const outputFilename = `output.${fileType}`
+      const outputFilename = `output.${settings.fileFormat}`
       console.log(outputFilename)
       await ffmpeg.exec(['-i', 'input.avi', outputFilename])
       const outputData = await ffmpeg.readFile(outputFilename)
