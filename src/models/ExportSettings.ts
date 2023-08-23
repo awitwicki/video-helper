@@ -3,19 +3,19 @@
         public fileFormat: string,
         public bitrate?: number,
         public codec?: string,
-        public sound?: BigInt
+        public sound?: number
     ) {
     }
 
     setCodec(newCodec: string) {
-        this.codec = newCodec;
+        this.codec = newCodec
     }
 
     setBitrate(newBitrate: number) {
-        this.bitrate = newBitrate;
+        this.bitrate = newBitrate
     }
 
-    setSound(newSound: BigInt) {
-        this.sound = newSound;
+    setSound(newSound: number) {
+        this.sound =  newSound
     }
 }
