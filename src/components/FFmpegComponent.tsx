@@ -22,24 +22,12 @@ function FFmpegComponent() {
       console.log(message)
     })
 
-    // const baseURL = "https://unpkg.com/@ffmpeg/core-mt@0.12.2/dist/esm";
-    //https://unpkg.com/@ffmpeg/core-mt@0.12.2/dist/esm/ffmpeg-core.js
-    //https://unpkg.com/@ffmpeg/core-mt@0.12.2/dist/esm/ffmpeg-core.wasm
-    //https://unpkg.com/@ffmpeg/core-mt@0.12.2/dist/esm/ffmpeg-core.worker.js
-
-    const jsCoreUrl = '/ffmpeg/ffmpeg-core.js'
-    const wasmCoreUrl = '/ffmpeg/ffmpeg-core.wasm'
-    const jsWorkerUrl = '/ffmpeg/ffmpeg-core.worker.js'
-
-    const jsCore = await toBlobURL(jsCoreUrl, 'text/javascript')
-    const wasmCore = await toBlobURL(wasmCoreUrl, 'application/wasm')
-    const workerCore = await toBlobURL(jsWorkerUrl, 'text/javascript')
+    const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.2/dist/esm'
 
     await ffmpeg.load({
-      coreURL: jsCore,
-      wasmURL: wasmCore,
-      workerURL: workerCore,
-    })
+      coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+      wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+    });
 
     setLoaded(true)
   }
@@ -62,7 +50,8 @@ function FFmpegComponent() {
       
       await ffmpeg.writeFile(inputFilename, await fetchFile(input))
       const ffmpegParams = GenerateFfmpegParams(inputFilename, settings, outputFilename)
-    
+      console.log(ffmpegParams.join(" "))
+      
       await ffmpeg.exec(ffmpegParams)
       const outputData = await ffmpeg.readFile(outputFilename)
 
