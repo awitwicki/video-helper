@@ -7,11 +7,13 @@ import { useState } from 'react'
 
 import { settingsAtom } from '../atoms/exportSettings'
 import { GenerateFfmpegParams } from  '../helpers/ExportSettingsFFmpegParamsBuilder'
+import {ProgressEventCallback} from "@ffmpeg/ffmpeg/dist/esm/types";
 
 function FFmpegComponent() {
   const [input, setInput] = useState<File | null>(null)
   const [output, setOutput] = useState<string | null>(null)
   const [loaded, setLoaded] = useState(false)
+  const [progress, setProgress] = useState("")
   const ffmpegRef = useRef(new FFmpeg())
 
   const [settings] = useAtom(settingsAtom)
@@ -22,8 +24,13 @@ function FFmpegComponent() {
 
   const load = async () => {
     const ffmpeg = ffmpegRef.current
+    
     ffmpeg.on('log', ({ message }) => {
       console.log(message)
+    })
+
+    ffmpeg.on("progress", ({ progress }) => {
+      setProgress(`Processing... complete: ${(progress * 100.0).toFixed(2)}% [Experimental]`)
     })
 
     const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.2/dist/esm'
@@ -120,6 +127,9 @@ function FFmpegComponent() {
           Transcode to mp4
         </button>
       )}
+      <p>
+        {progress}
+      </p>
       {output && <video controls src={output}/>}
     </>
   ) : (
