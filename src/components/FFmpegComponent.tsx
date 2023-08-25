@@ -15,6 +15,10 @@ function FFmpegComponent() {
   const ffmpegRef = useRef(new FFmpeg())
 
   const [settings] = useAtom(settingsAtom)
+  const [fileSizeExceeded, setFileSizeExceeded] = useState(false);
+  const [fileSizeWarning, setFileSizeWarning] = useState(false);
+  const maxFileSizeForNormalWork = 10; // MB
+  const maxFileSize = 2000; // MB
 
   const load = async () => {
     const ffmpeg = ffmpegRef.current
@@ -68,7 +72,19 @@ function FFmpegComponent() {
   const handleFileChange = async (event: Event) => {
     const target = event.target as HTMLInputElement
     if (target.files && target.files.length > 0) {
-      setInput(target.files[0])
+      const file = target.files[0]
+      const fileSize = file.size / 1000000 // Mega Bytes
+            
+      if (fileSize > maxFileSize) {
+        setFileSizeExceeded(true);
+        return;
+      }
+
+      if (fileSize > maxFileSizeForNormalWork) {
+        setFileSizeWarning(true)
+      }
+      
+      setInput(file)
     }
   }
 
@@ -87,6 +103,16 @@ function FFmpegComponent() {
           accept="video/*"
           onChange={handleFileChange}
         />
+        {fileSizeExceeded && (
+            <span className="text-red-700">
+              File size exceeded the WASM limit of {maxFileSize} MB
+            </span>
+        )}
+        {fileSizeWarning && (
+            <span>
+              Converting time might be too long for files bigger than 10MB
+            </span>
+        )}
       </div>
       <br />
       {input && (
@@ -94,7 +120,7 @@ function FFmpegComponent() {
           Transcode to mp4
         </button>
       )}
-      {output && <video controls src={output} />}
+      {output && <video controls src={output}/>}
     </>
   ) : (
     <span>Loading...</span>
