@@ -4,8 +4,8 @@
         public bitrate?: number,
         public codec?: string,
         public sound?: number,
-        public trimFrom?: string,
-        public trimTo?: string,
+        public trimFrom?: string | null,
+        public trimTo?: string | null
     ) {
     }
 
@@ -21,11 +21,11 @@
         this.sound =  newSound
     }
 
-    setTrimFrom(timeStamp: string) {
+    setTrimFrom(timeStamp: string | null) {
         this.trimFrom =  timeStamp
     }
 
-    setTrimTo(timeStamp: string) {
+    setTrimTo(timeStamp: string | null) {
         this.trimTo =  timeStamp
     }
 }

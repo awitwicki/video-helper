@@ -4,12 +4,10 @@ import { settingsAtom } from '../atoms/exportSettings';
 import { FileFormatOptions } from "../helpers/FileFormatOptions";
 import { CodecOptions } from "../helpers/codecOptions";
 import { ExportSettings } from "../models/ExportSettings";
-import { useState } from "preact/hooks";
+import TimeSpanInput from "./TimeSpanInputComponent";
 
 function FileExportParamsComponent() {
   const [settings, setValue] = useAtom(settingsAtom);
-  const [isTrimFromValid, setTrimFromIsValid] = useState(true);
-  const [isTrimToValid, setTrimToIsValid] = useState(true);
   const handleFileOutputTypeChange = (newValue: SingleValue<{ value: string; label: string; }>, actionMeta: any) => {
     const newSettings = new ExportSettings(newValue!.value)
     setValue(newSettings)
@@ -30,30 +28,16 @@ function FileExportParamsComponent() {
       setValue(settings)
   };
 
-  const handleTrimFromChange = (event: any) => {
-      const input = event.target.value;
-      const regex = /^(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d|\d+):[0-5]\d:[0-5]\d$/
-      const isValid = regex.test(input)
-
-      setTrimFromIsValid(isValid)
-      
-      if (isValid) {
-          settings.setTrimFrom(event.target.value)
-          setValue(settings)
-      }
+  const handleTrimFromChange = (newValue: string, isValid: boolean) => {
+      const value: string | null = isValid ? newValue : null
+      settings.setTrimFrom(value)
+      setValue(settings)
   };
 
-  const handleTrimToChange = (event: any) => {
-      const input = event.target.value;
-      const regex = /^(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d|\d+):[0-5]\d:[0-5]\d$/
-      const isValid = regex.test(input)
-
-      setTrimToIsValid(isValid)
-
-      if (isValid) {
-          settings.setTrimTo(event.target.value)
-          setValue(settings)
-      }
+  const handleTrimToChange = (newValue: string, isValid: boolean) => {
+      const value: string | null = isValid ? newValue : null
+      settings.setTrimTo(value)
+      setValue(settings)
   };
 
   return (
@@ -85,21 +69,13 @@ function FileExportParamsComponent() {
                   <label className="mb-2 inline-block text-neutral-700 dark:text-neutral-200">
                       Trim from (optional)
                   </label>
-                  <input type="text"
-                         className={`bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight bg-white" id="inline-full-name ${isTrimFromValid ? '' : 'border-red-500'}`}
-                         placeholder="HH:MM:SS"
-                         onChange={handleTrimFromChange}
-                  />
+                  <TimeSpanInput onChange={handleTrimFromChange} />
               </div>
               <div>
                   <label className="mb-2 inline-block text-neutral-700 dark:text-neutral-200">
                       Trim to (optional)
                   </label>
-                  <input type="text"
-                         className={`bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight bg-white" id="inline-full-name ${isTrimToValid ? '' : 'border-red-500'}`}
-                         placeholder="HH:MM:SS"
-                         onChange={handleTrimToChange}
-                  />
+                  <TimeSpanInput onChange={handleTrimToChange} />
               </div>
           </div>
          <div className="my-4">
