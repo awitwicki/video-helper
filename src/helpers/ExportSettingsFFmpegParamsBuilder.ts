@@ -14,6 +14,12 @@ export function GenerateFfmpegParams(inputFilename: string, exportSettings: Expo
   if (exportSettings.sound) {
     params.push('-filter:a', `"volume=${exportSettings.sound}"`);
   }
+  if (exportSettings.trimFrom) {
+    params.push('-ss', `${exportSettings.trimFrom}`);
+  }
+  if (exportSettings.trimTo) {
+    params.push('-to', `${exportSettings.trimTo}`);
+  }
 
   params.push(outputFilename);
 
