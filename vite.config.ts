@@ -4,6 +4,7 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 import { visualizer } from 'rollup-plugin-visualizer'
 
 export default defineConfig({
+  base: '/video-helper/',
   plugins: [preact(), tsconfigPaths()],
   optimizeDeps: {
     exclude: ["@ffmpeg/ffmpeg", "@ffmpeg/util"],
