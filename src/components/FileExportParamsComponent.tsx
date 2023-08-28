@@ -41,7 +41,7 @@ function FileExportParamsComponent() {
   };
 
   return (
-      <div className="w-full max-w-sm">
+      <div className="w-2/6">
           <div className="my-4">
               <label className="mb-2 inline-block text-neutral-700 dark:text-neutral-200">
                   Select max video bitrate kbps
@@ -78,26 +78,26 @@ function FileExportParamsComponent() {
                   <TimeSpanInput onChange={handleTrimToChange} />
               </div>
           </div>
-         <div className="my-4">
-           <label className="mb-2 inline-block text-neutral-700 dark:text-neutral-200">
-             Select file format
-           </label>
-           <Select
-               defaultValue={FileFormatOptions[0]}
-               onChange={handleFileOutputTypeChange}
-               options={FileFormatOptions}
-           />
-         </div>
-         <div className="my-4">
-             <label className="mb-2 inline-block text-neutral-700 dark:text-neutral-200">
-                 Select file codec
-             </label>
-             <Select
-                 defaultValue={CodecOptions[0]}
-                 onChange={handleCodecChange}
-                 options={CodecOptions}
-             />
-         </div>
+          <div className="my-4">
+            <label className="mb-2 inline-block text-neutral-700 dark:text-neutral-200">
+              Select file format
+            </label>
+            <Select
+                defaultValue={FileFormatOptions[0]}
+                onChange={handleFileOutputTypeChange}
+                options={FileFormatOptions}
+            />
+          </div>
+          <div className="my-4">
+              <label className="mb-2 inline-block text-neutral-700 dark:text-neutral-200">
+                  Select file codec
+              </label>
+              <Select
+                  defaultValue={CodecOptions[0]}
+                  onChange={handleCodecChange}
+                  options={CodecOptions}
+              />
+          </div>
       </div>)
 }
 

@@ -96,11 +96,11 @@ function FFmpegComponent() {
   }
 
   return loaded ? (
-    <>
+    <div className="w-4/6">
       <div class="mb-3">
         <label
           for="formFile"
-          class="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
+          class="my-4 mb-2 inline-block text-neutral-700 dark:text-neutral-200"
         >
           Default file input example
         </label>
@@ -127,11 +127,11 @@ function FFmpegComponent() {
           Transcode to mp4
         </button>
       )}
-      <p>
+      <p className="my-2">
         {progress}
       </p>
       {output && <video controls src={output}/>}
-    </>
+    </div>
   ) : (
     <span>Loading...</span>
   )
