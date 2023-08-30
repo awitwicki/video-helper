@@ -5,10 +5,17 @@
         public codec?: string,
         public sound?: number,
         public trimFrom?: string | null,
-        public trimTo?: string | null
+        public trimTo?: string | null,
+        public inputFileName?: string
     ) {
+        if (!inputFileName)
+            this.inputFileName = 'input.mp4'
     }
 
+    setFileFormat(newFileFormat: string) {
+        this.fileFormat = newFileFormat
+    }
+    
     setCodec(newCodec: string) {
         this.codec = newCodec
     }
@@ -27,5 +34,9 @@
 
     setTrimTo(timeStamp: string | null) {
         this.trimTo =  timeStamp
+    }
+
+    setInputFileName(inputFileName: string) {
+        this.inputFileName =  inputFileName
     }
 }

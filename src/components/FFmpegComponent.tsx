@@ -7,18 +7,20 @@ import { useState } from 'react'
 
 import { settingsAtom } from '../atoms/exportSettings'
 import { GenerateFfmpegParams } from  '../helpers/ExportSettingsFFmpegParamsBuilder'
-import {ProgressEventCallback} from "@ffmpeg/ffmpeg/dist/esm/types";
+import {ffmpegCommandAtom} from "../atoms/ffmpegCommand";
 
 function FFmpegComponent() {
   const [input, setInput] = useState<File | null>(null)
   const [output, setOutput] = useState<string | null>(null)
   const [loaded, setLoaded] = useState(false)
   const [progress, setProgress] = useState("")
+  const [ffmpegCommandValue , setFfmpegCommand] = useAtom(ffmpegCommandAtom);
   const ffmpegRef = useRef(new FFmpeg())
 
-  const [settings] = useAtom(settingsAtom)
+  const [settings, setFfmpegSettings] = useAtom(settingsAtom)
   const [fileSizeExceeded, setFileSizeExceeded] = useState(false);
   const [fileSizeWarning, setFileSizeWarning] = useState(false);
+  const [clickToCopyText, setClickToCopyText] = useState('Click to copy');
   const maxFileSizeForNormalWork = 10; // MB
   const maxFileSize = 2000; // MB
 
@@ -47,6 +49,13 @@ function FFmpegComponent() {
     load() // Call the async method automatically when the component mounts
   }, []) // Empty dependency array ensures this effect runs only once on mount
 
+  const handleCopyToClipboardClick = async () => {
+    await navigator.clipboard.writeText(ffmpegCommandValue)
+    setClickToCopyText('Copied')
+    await new Promise(r => setTimeout(r, 1000));
+    setClickToCopyText('Click to copy')
+  }
+  
   const transcode = async () => {
     console.log(settings)
     if (!input) {
@@ -60,7 +69,7 @@ function FFmpegComponent() {
       const outputFilename = `output.${settings.fileFormat}`
       
       await ffmpeg.writeFile(inputFilename, await fetchFile(input))
-      const ffmpegParams = GenerateFfmpegParams(inputFilename, settings, outputFilename)
+      const ffmpegParams = GenerateFfmpegParams(settings)
       console.log(ffmpegParams.join(" "))
       
       await ffmpeg.exec(ffmpegParams)
@@ -91,11 +100,18 @@ function FFmpegComponent() {
         setFileSizeWarning(true)
       }
       
+      settings.setInputFileName(file.name)
+      setFfmpegSettings(settings)
+      const cliCommand = 'ffmpeg ' + GenerateFfmpegParams(settings).join(" ")
+      console.log(cliCommand)
+
+      setFfmpegCommand(cliCommand)
       setInput(file)
     }
   }
 
   return loaded ? (
+      
     <div className="w-4/6">
       <div class="mb-3">
         <label
@@ -121,13 +137,18 @@ function FFmpegComponent() {
             </span>
         )}
       </div>
-      <br />
+      <div class="mb-4 p-4 bg-gray-900 rounded-lg shadow-md break-words cursor-pointer" onClick={ async () => { await handleCopyToClipboardClick() }}>
+        <p class="text-green-400 ">$ {ffmpegCommandValue}</p>
+        <p className="mt-4 text-gray-600 float-right">
+          {clickToCopyText}
+        </p>
+      </div>
       {input && (
         <button class="btn" onClick={transcode}>
           Transcode to mp4
         </button>
       )}
-      <p className="my-2">
+      <p className="my-4">
         {progress}
       </p>
       {output && <video controls src={output}/>}

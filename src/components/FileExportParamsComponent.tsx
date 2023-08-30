@@ -3,41 +3,57 @@ import Select, {SingleValue} from 'react-select';
 import { settingsAtom } from '../atoms/exportSettings';
 import { FileFormatOptions } from "../helpers/FileFormatOptions";
 import { CodecOptions } from "../helpers/codecOptions";
-import { ExportSettings } from "../models/ExportSettings";
 import TimeSpanInput from "./TimeSpanInputComponent";
+import {ffmpegCommandAtom} from "../atoms/ffmpegCommand";
+import {GenerateFfmpegParams} from "../helpers/ExportSettingsFFmpegParamsBuilder";
 
 function FileExportParamsComponent() {
   const [settings, setValue] = useAtom(settingsAtom);
+  const [_, setFfmpegCommand] = useAtom(ffmpegCommandAtom);
+  
+  const setGenerateCliCommand = () => {
+      const cliCommand = 'ffmpeg ' + GenerateFfmpegParams(settings).join(" ")
+      console.log(cliCommand)
+
+      setFfmpegCommand(cliCommand)
+  }
+  
   const handleFileOutputTypeChange = (newValue: SingleValue<{ value: string; label: string; }>, actionMeta: any) => {
-    const newSettings = new ExportSettings(newValue!.value)
-    setValue(newSettings)
+    settings.setFileFormat(newValue!.value)
+    setValue(settings)
+    setGenerateCliCommand()
   };
 
   const handleCodecChange = (newValue: SingleValue<{ value: string; label: string; }>, actionMeta: any) => {
       settings.setCodec(newValue!.value)
       setValue(settings)
+      setGenerateCliCommand()
   };
 
   const handleBitrateChange = (event: any) => {
       settings.setBitrate(Number(event.target.value))
       setValue(settings)
+      setGenerateCliCommand()
   };
 
   const handleAudioVolumeChange = (event: any) => {
       settings.setSound(Number(event.target.value) / 100)
       setValue(settings)
+      setGenerateCliCommand()
   };
 
   const handleTrimFromChange = (newValue: string, isValid: boolean) => {
       const value: string | null = isValid ? newValue : null
       settings.setTrimFrom(value)
       setValue(settings)
+      setGenerateCliCommand()
   };
 
   const handleTrimToChange = (newValue: string, isValid: boolean) => {
       const value: string | null = isValid ? newValue : null
       settings.setTrimTo(value)
       setValue(settings)
+      setGenerateCliCommand()
   };
 
   return (

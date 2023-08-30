@@ -1,9 +1,9 @@
 ﻿import { ExportSettings } from '../models/ExportSettings';
 
-export function GenerateFfmpegParams(inputFilename: string, exportSettings: ExportSettings, outputFilename: string): string[] {
+export function GenerateFfmpegParams(exportSettings: ExportSettings): string[] {
   const params: string[] = [];
 
-  params.push('-i', inputFilename);
+  params.push('-i', exportSettings.inputFileName!);
 
   if (exportSettings.bitrate) {
     params.push('-b:v', `${exportSettings.bitrate}k`);
@@ -21,7 +21,7 @@ export function GenerateFfmpegParams(inputFilename: string, exportSettings: Expo
     params.push('-to', `${exportSettings.trimTo}`);
   }
 
-  params.push(outputFilename);
+  params.push(`output.${exportSettings.fileFormat}`);
 
   return params;
 }
