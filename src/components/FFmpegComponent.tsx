@@ -57,7 +57,6 @@ function FFmpegComponent() {
   }
   
   const transcode = async () => {
-    console.log(settings)
     if (!input) {
       console.log('Video file not assigned') // Check if this message is printed
       return
@@ -65,15 +64,13 @@ function FFmpegComponent() {
 
     try {
       const ffmpeg = ffmpegRef.current
-      const inputFilename = 'input'
-      const outputFilename = `output.${settings.fileFormat}`
+      const inputFilename = settings.inputFileName!
       
       await ffmpeg.writeFile(inputFilename, await fetchFile(input))
       const ffmpegParams = GenerateFfmpegParams(settings)
-      console.log(ffmpegParams.join(" "))
       
       await ffmpeg.exec(ffmpegParams)
-      const outputData = await ffmpeg.readFile(outputFilename)
+      const outputData = await ffmpeg.readFile(inputFilename)
 
       // Convert Uint8Array to Blob and create a URL for the video
       const outputBlob = new Blob([outputData], { type: 'video/mp4' })
