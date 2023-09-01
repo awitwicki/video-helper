@@ -9,6 +9,7 @@ import { settingsAtom } from '../atoms/exportSettings'
 import { GenerateFfmpegParams } from  '../helpers/ExportSettingsFFmpegParamsBuilder'
 import {ffmpegCommandAtom} from "../atoms/ffmpegCommand";
 import {FaSpinner} from "react-icons/fa";
+import { IconContext } from 'react-icons'
 
 function FFmpegComponent() {
   const [input, setInput] = useState<File | null>(null)
@@ -146,7 +147,11 @@ function FFmpegComponent() {
       </div>
       {input && (
           <button className="btn" onClick={transcode}>
-            {isProcessing && <FaSpinner className="animate-spin"/>}
+            {isProcessing && (
+              <IconContext.Provider value={{ className: "animate-spin" }}>
+                <FaSpinner />
+              </IconContext.Provider>
+            )}
             {isProcessing ? "Processing..." : "Convert"}
           </button>
       )}
