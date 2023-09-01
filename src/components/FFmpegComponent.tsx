@@ -59,8 +59,7 @@ function FFmpegComponent() {
   }
   
   const transcode = async () => {
-    if (!input) {
-      console.log('Video file not assigned') // Check if this message is printed
+    if (!input || isProcessing) {
       return
     }
 
