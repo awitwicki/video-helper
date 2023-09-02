@@ -74,7 +74,7 @@ function FFmpegComponent() {
       const ffmpegParams = GenerateFfmpegParams(settings)
       
       await ffmpeg.exec(ffmpegParams)
-      const outputData = await ffmpeg.readFile(inputFilename)
+      const outputData = await ffmpeg.readFile(`output.${settings.fileFormat}`)
 
       // Convert Uint8Array to Blob and create a URL for the video
       const outputBlob = new Blob([outputData], { type: 'video/mp4' })
