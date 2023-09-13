@@ -58,6 +58,15 @@ function FFmpegComponent() {
     await new Promise(r => setTimeout(r, 1000));
     setClickToCopyText('Click to copy')
   }
+
+  const downloadFile = (blob: Blob, fileName: string) => {
+    const downloadLink = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    downloadLink.href = url;
+    downloadLink.download = fileName;
+    downloadLink.click();
+    URL.revokeObjectURL(url);
+  }
   
   const transcode = async () => {
     if (!input || isProcessing) {
@@ -81,6 +90,7 @@ function FFmpegComponent() {
       const outputUrl = URL.createObjectURL(outputBlob)
 
       setOutput(outputUrl)
+      downloadFile(outputBlob, `output.${settings.fileFormat}`)
     } catch (error) {
       console.error('Error converting video:', error)
     }
