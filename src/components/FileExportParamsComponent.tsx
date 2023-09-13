@@ -71,7 +71,7 @@ function FileExportParamsComponent() {
           </div>
           <div className="my-4">
               <label className="mb-2 inline-block text-neutral-700 dark:text-neutral-200">
-                  Select audio volume percent (0..200)
+                  Select audio volume percent (0..200) 0 is mute
               </label>
               <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight bg-white" id="inline-full-name" type="number"
                      onChange={handleAudioVolumeChange}

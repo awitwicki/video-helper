@@ -11,8 +11,13 @@ export function GenerateFfmpegParams(exportSettings: ExportSettings): string[] {
   if (exportSettings.codec) {
     params.push('-c:v', exportSettings.codec);
   }
-  if (exportSettings.sound) {
-    params.push('-filter:a', `"volume=${exportSettings.sound}"`);
+  if (exportSettings.sound !== undefined) {
+    if (exportSettings.sound > 0) {
+      params.push('-filter:a', `"volume=${exportSettings.sound}"`);
+    }
+    else {
+      params.push('-an');
+    }
   }
   if (exportSettings.trimFrom) {
     params.push('-ss', `${exportSettings.trimFrom}`);
