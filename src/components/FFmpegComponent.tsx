@@ -158,7 +158,11 @@ function FFmpegComponent() {
       <p className="my-4">
         {progress}
       </p>
-      {output && <video controls src={output}/>}
+      {output &&
+        <div class="grid place-items-center">
+          <video controls src={output}/>
+        </div>
+      }
     </div>
   ) : (
     <span>Loading...</span>
