@@ -12,6 +12,7 @@ import {FaSpinner} from "react-icons/fa";
 import { IconContext } from 'react-icons'
 
 function FFmpegComponent() {
+  const errorModalRef = useRef<HTMLDialogElement | null>(null);
   const [input, setInput] = useState<File | null>(null)
   const [output, setOutput] = useState<string | null>(null)
   const [loaded, setLoaded] = useState(false)
@@ -95,7 +96,9 @@ function FFmpegComponent() {
     } catch (error) {
       console.error('Error converting video:', error)
       setErrorText(`${error}`)
-      document.getElementById('error_modal').showModal()
+      if (errorModalRef.current) {
+        errorModalRef.current.showModal();
+      }
     }
 
     setIsProcessing(false)
@@ -175,7 +178,7 @@ function FFmpegComponent() {
           <video controls src={output}/>
         </div>
       }
-      <dialog id="error_modal" className="modal modal-bottom sm:modal-middle">
+      <dialog className="modal modal-bottom sm:modal-middle" ref={errorModalRef}>
         <div className="modal-box border-solid border-2 border-red-500">
           <h3 className="font-bold text-lg">Error!</h3>
           <p className="py-4">{errorText}</p>
