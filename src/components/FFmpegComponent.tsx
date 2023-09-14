@@ -1,4 +1,5 @@
 // import 'src/components/App.css'
+import Swal from 'sweetalert2'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { fetchFile, toBlobURL } from '@ffmpeg/util'
 import { useAtom } from 'jotai'
@@ -93,6 +94,12 @@ function FFmpegComponent() {
       downloadFile(outputBlob, `output.${settings.fileFormat}`)
     } catch (error) {
       console.error('Error converting video:', error)
+      Swal.fire({
+        title: 'Error!',
+        text: `${error}`,
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      })
     }
 
     setIsProcessing(false)
@@ -124,7 +131,6 @@ function FFmpegComponent() {
   }
 
   return loaded ? (
-      
     <div className="w-4/6">
       <div class="mb-3">
         <label

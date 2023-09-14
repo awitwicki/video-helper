@@ -8605,6 +8605,7 @@ __metadata:
     react-scripts: ^5.0.1
     react-select: ^5.7.4
     rollup-plugin-visualizer: ^5.9.2
+    sweetalert2: ^11.7.27
     tailwindcss: ^3.3.3
     typescript: ^5.1.6
     vite: ^4.4.7
@@ -15048,6 +15049,13 @@ __metadata:
   bin:
     svgo: bin/svgo
   checksum: b92f71a8541468ffd0b81b8cdb36b1e242eea320bf3c1a9b2c8809945853e9d8c80c19744267eb91cabf06ae9d5fff3592d677df85a31be4ed59ff78534fa420
+  languageName: node
+  linkType: hard
+
+"sweetalert2@npm:^11.7.27":
+  version: 11.7.27
+  resolution: "sweetalert2@npm:11.7.27"
+  checksum: 73c3184ecb01519c3e9ab439ea463070fb5fe53b36e48bbe67b9647f2ee4c8a2767d50e66b53120b1d9ebe16999491bbbfb7795a9ebed2ff3a8407da55bed317
   languageName: node
   linkType: hard
 
