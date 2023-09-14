@@ -16,8 +16,7 @@
     "jotai": "^2.2.2",
     "preact": "^10.16.0",
     "react-icons": "^4.10.1",
-    "react-select": "^5.7.4",
-    "sweetalert2": "^11.7.27"
+    "react-select": "^5.7.4"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.5.0",

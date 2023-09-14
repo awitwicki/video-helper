@@ -1,5 +1,4 @@
 // import 'src/components/App.css'
-import Swal from 'sweetalert2'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { fetchFile, toBlobURL } from '@ffmpeg/util'
 import { useAtom } from 'jotai'
@@ -24,6 +23,7 @@ function FFmpegComponent() {
   const [fileSizeExceeded, setFileSizeExceeded] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [fileSizeWarning, setFileSizeWarning] = useState(false);
+  const [errorText, setErrorText] = useState("");
   const [clickToCopyText, setClickToCopyText] = useState('Click to copy');
   const maxFileSizeForNormalWork = 10; // MB
   const maxFileSize = 2000; // MB
@@ -94,12 +94,8 @@ function FFmpegComponent() {
       downloadFile(outputBlob, `output.${settings.fileFormat}`)
     } catch (error) {
       console.error('Error converting video:', error)
-      Swal.fire({
-        title: 'Error!',
-        text: `${error}`,
-        icon: 'error',
-        confirmButtonText: 'Ok'
-      })
+      setErrorText(`${error}`)
+      document.getElementById('error_modal').showModal()
     }
 
     setIsProcessing(false)
@@ -179,6 +175,18 @@ function FFmpegComponent() {
           <video controls src={output}/>
         </div>
       }
+      <dialog id="error_modal" className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box border-solid border-2 border-red-500">
+          <h3 className="font-bold text-lg">Error!</h3>
+          <p className="py-4">{errorText}</p>
+          <p>Press ESC key or click the button below to close</p>
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   ) : (
     <span>Loading...</span>
