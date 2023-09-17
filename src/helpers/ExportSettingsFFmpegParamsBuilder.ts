@@ -1,6 +1,10 @@
 ﻿import { ExportSettings } from '../models/ExportSettings';
 
-export function GenerateFfmpegParams(exportSettings: ExportSettings): string[] {
+export function GenerateFfmpegNormalizedCommandString(exportSettings: ExportSettings): string {
+    return "$ ffmpeg " + GenerateFfmpegCommandString(exportSettings).join(" ");
+}
+
+export function GenerateFfmpegCommandString(exportSettings: ExportSettings): string[] {
   const params: string[] = [];
 
   params.push('-i', exportSettings.inputFileName!);

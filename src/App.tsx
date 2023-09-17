@@ -16,7 +16,7 @@ export default function () {
                 <FaGithub size={30} />
             </a>
         </div>
-        <a href="https://ffmpeg.org/download.html" target="_blank" class="mb-4">Download FFmpeg</a>
+        
         <Suspense fallback={<p>Loading...</p>}>
             <div className="flex gap-4">
               <FFmpegComponent />

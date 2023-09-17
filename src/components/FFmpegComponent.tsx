@@ -6,7 +6,10 @@ import { useEffect, useRef } from 'preact/compat'
 import { useState } from 'react'
 
 import { settingsAtom } from '../atoms/exportSettings'
-import { GenerateFfmpegParams } from  '../helpers/ExportSettingsFFmpegParamsBuilder'
+import {
+  GenerateFfmpegCommandString,
+  GenerateFfmpegNormalizedCommandString
+} from '../helpers/ExportSettingsFFmpegParamsBuilder'
 import {ffmpegCommandAtom} from "../atoms/ffmpegCommand";
 import {FaSpinner} from "react-icons/fa";
 import { IconContext } from 'react-icons'
@@ -82,8 +85,7 @@ function FFmpegComponent() {
       const inputFilename = settings.inputFileName!
       
       await ffmpeg.writeFile(inputFilename, await fetchFile(input))
-      const ffmpegParams = GenerateFfmpegParams(settings)
-      
+      const ffmpegParams = ffmpegCommandValue.replace("$ ffmpeg ", "").split(" ")
       await ffmpeg.exec(ffmpegParams)
       const outputData = await ffmpeg.readFile(`output.${settings.fileFormat}`)
 
@@ -121,16 +123,22 @@ function FFmpegComponent() {
       
       settings.setInputFileName(file.name)
       setFfmpegSettings(settings)
-      const cliCommand = 'ffmpeg ' + GenerateFfmpegParams(settings).join(" ")
-      console.log(cliCommand)
+      const cliCommand = GenerateFfmpegNormalizedCommandString(settings)
 
       setFfmpegCommand(cliCommand)
       setInput(file)
     }
   }
 
+  const handleCommandChange = (event: Event) => {
+    // Update the state when the input value changes
+    const target = event.target as HTMLInputElement
+    setFfmpegCommand(target.value);
+  };
+
   return loaded ? (
     <div className="w-4/6">
+      <a href="https://ffmpeg.org/download.html" target="_blank" className="mb-4">Download FFmpeg</a>
       <div class="mb-3">
         <label
           for="formFile"
@@ -152,12 +160,15 @@ function FFmpegComponent() {
             </span>
         )}
       </div>
-      <div class="mb-4 p-4 bg-gray-900 rounded-lg shadow-md break-words cursor-pointer" onClick={ async () => { await handleCopyToClipboardClick() }}>
-        <p class="text-green-400 ">$ {ffmpegCommandValue}</p>
-        <p className="mt-4 text-gray-600 float-right">
-          {clickToCopyText}
-        </p>
-      </div>
+      <textarea className="textarea textarea-bordered text-green-400 w-full shadow-md mb-4 p-4 break-words cursor-pointer"
+                placeholder="FFmpeg command"
+                spellcheck={false}
+                value={ffmpegCommandValue}
+                onChange={handleCommandChange}>
+      </textarea>
+      <p className="mt-4 text-gray-600 float-right" onClick={ async () => { await handleCopyToClipboardClick() }}>
+        {clickToCopyText}
+      </p>
       {input && (
           <button className="btn" onClick={transcode}>
             {isProcessing && (

@@ -4,15 +4,15 @@ import { settingsAtom } from '../atoms/exportSettings';
 import { FileFormatOptions } from "../helpers/FileFormatOptions";
 import { CodecOptions } from "../helpers/codecOptions";
 import TimeSpanInput from "./TimeSpanInputComponent";
-import {ffmpegCommandAtom} from "../atoms/ffmpegCommand";
-import {GenerateFfmpegParams} from "../helpers/ExportSettingsFFmpegParamsBuilder";
+import { ffmpegCommandAtom} from "../atoms/ffmpegCommand";
+import { GenerateFfmpegNormalizedCommandString} from "../helpers/ExportSettingsFFmpegParamsBuilder";
 
 function FileExportParamsComponent() {
   const [settings, setValue] = useAtom(settingsAtom);
   const [_, setFfmpegCommand] = useAtom(ffmpegCommandAtom);
   
   const setGenerateCliCommand = () => {
-      const cliCommand = 'ffmpeg ' + GenerateFfmpegParams(settings).join(" ")
+      const cliCommand = GenerateFfmpegNormalizedCommandString(settings)
       console.log(cliCommand)
 
       setFfmpegCommand(cliCommand)
@@ -58,7 +58,7 @@ function FileExportParamsComponent() {
 
   return (
       <div className="w-2/6">
-          <div className="my-4">
+          <div className="mb-4">
               <label className="mb-2 inline-block text-neutral-700 dark:text-neutral-200">
                   Select max video bitrate kbps
               </label>
