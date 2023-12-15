@@ -121,7 +121,7 @@ function FFmpegComponent() {
         setFileSizeWarning(true)
       }
       
-      settings.setInputFileName(file.name)
+      settings.setInputFileName(file.name.replace(/ /g, '_'))
       setFfmpegSettings(settings)
       const cliCommand = GenerateFfmpegNormalizedCommandString(settings)
 
