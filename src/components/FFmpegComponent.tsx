@@ -1,6 +1,7 @@
 // import 'src/components/App.css'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { fetchFile, toBlobURL } from '@ffmpeg/util'
+import ytdl from "ytdl-core";
 import { useAtom } from 'jotai'
 import { useEffect, useRef } from 'preact/compat'
 import { useState } from 'react'
@@ -72,6 +73,24 @@ function FFmpegComponent() {
     downloadLink.click();
     URL.revokeObjectURL(url);
   }
+
+
+  // TODO
+  const downloadFromUrl = async () => {
+    setIsProcessing(true)
+
+    try {
+      const file = ytdl('http://www.youtube.com/watch?v=aqz-KE-bpKQ');
+    } catch (error) {
+      console.error('Error downloading video:', error)
+      setErrorText(`${error}`)
+      if (errorModalRef.current) {
+        errorModalRef.current.showModal();
+      }
+    }
+
+    setIsProcessing(false)
+  }
   
   const transcode = async () => {
     if (!input || isProcessing) {
@@ -137,71 +156,120 @@ function FFmpegComponent() {
   };
 
   return loaded ? (
-    <div className="w-4/6">
-      <a href="https://ffmpeg.org/download.html" target="_blank" className="mb-4">Download FFmpeg</a>
-      <div class="mb-3">
-        <label
-          for="formFile"
-          class="my-4 mb-2 inline-block text-neutral-700 dark:text-neutral-200"
-        >
-        </label>
-        <input type="file" 
-               accept="video/*"
-               className="file-input file-input-bordered w-full my-2"
-               onChange={handleFileChange}/>
-        {fileSizeExceeded && (
-            <span className="text-red-700">
-              File size exceeded the WASM limit of {maxFileSize} MB
-            </span>
-        )}
-        {fileSizeWarning && (
-            <span>
-              Converting time might be too long for files bigger than 10MB
-            </span>
-        )}
-      </div>
-      <textarea className="textarea textarea-bordered text-green-400 w-full shadow-md mb-4 p-4 break-words cursor-pointer"
-                placeholder="FFmpeg command"
-                spellcheck={false}
-                value={ffmpegCommandValue}
-                onChange={handleCommandChange}>
-      </textarea>
-      <p className="mt-4 text-gray-600 float-right" onClick={ async () => { await handleCopyToClipboardClick() }}>
-        {clickToCopyText}
-      </p>
-      {input && (
-          <button className="btn" onClick={transcode}>
-            {isProcessing && (
-              <IconContext.Provider value={{ className: "animate-spin" }}>
-                <FaSpinner />
-              </IconContext.Provider>
-            )}
-            {isProcessing ? "Processing..." : "Convert"}
-          </button>
-      )}
-      <p className="my-4">
-        {progress}
-      </p>
-      {output &&
-        <div class="grid place-items-center">
-          <video controls src={output}/>
-        </div>
-      }
-      <dialog className="modal modal-bottom sm:modal-middle" ref={errorModalRef}>
-        <div className="modal-box border-solid border-2 border-red-500">
-          <h3 className="font-bold text-lg">Error!</h3>
-          <p className="py-4">{errorText}</p>
-          <p>Press ESC key or click the button below to close</p>
-          <div className="modal-action">
-            <form method="dialog">
-              <button className="btn">Close</button>
-            </form>
+      <div className="w-4/6">
+        <a href="https://ffmpeg.org/download.html" target="_blank" className="absolute end-2.5 bottom-2.5 text-gray-600">Download FFmpeg</a>
+
+        
+
+        <h2 class="text-2xl mb-4">Enter Youtube URL or select your own file</h2>
+        <div class="flex gap-4 mb-3">
+          <div className="w-3/6">
+            <div>
+
+            
+              <div class="flex rounded-lg shadow-sm border border-gray-300 dark:border-gray-600">
+                <span
+                    class="px-4 inline-flex items-center min-w-fit rounded-s-md   border-gray-200  text-sm text-gray-500  dark:border-gray-700 dark:text-gray-400
+                    dark:bg-gray-800 bg-gray-800 hover:bg-gray-900"
+                    onClick={downloadFromUrl}
+                >Download
+                </span>
+                <input placeholder="Youtube URL"
+                       type="search"
+                       className="py-3 px-4 block w-full bg-gray-50 dark:bg-gray-700 shadow-sm rounded-e-lg dark:text-white focus:border-blue-500"/>
+              </div>
+            </div>
+
+
           </div>
+
+          <div className="w-3/6">
+            <div class="">
+
+              <input type="file" accept="video/*" name="file-input" id="file-input" className="
+              block w-full
+              border
+              border-gray-200
+              shadow-sm
+              rounded-lg 
+              bg-gray-50
+              focus:outline-none dark:bg-gray-700
+              
+              focus:border-blue-500 
+              focus:ring-blue-500
+              
+              dark:border-gray-700
+              dark:text-gray-400
+              dark:focus:outline-none
+              dark:focus:ring-1
+              dark:focus:ring-gray-600
+              
+              file:hover:bg-gray-900
+              file:border-0
+              file:bg-gray-800 file:me-4
+              file:py-3 file:px-4
+              dark:file:bg-gray-800 dark:file:text-gray-400"
+                     onChange={handleFileChange}/>
+
+              {fileSizeExceeded && (
+                  <span className="text-red-700">
+                    File size exceeded the WASM limit of {maxFileSize} MB
+                  </span>
+              )}
+              {fileSizeWarning && (
+                  <span>
+                    Converting time might be too long for files bigger than 10MB
+                  </span>
+              )}
+            </div>
+          </div>
+
         </div>
-      </dialog>
-    </div>
+        <textarea
+            className="textarea textarea-bordered text-green-400 w-full shadow-md mb-4 p-4 break-words cursor-pointer"
+            placeholder="FFmpeg command"
+            spellcheck={false}
+            value={ffmpegCommandValue}
+            onChange={handleCommandChange}>
+      </textarea>
+        <p className="mt-4 text-gray-600 float-right" onClick={async () => {
+          await handleCopyToClipboardClick()
+        }}>
+          {clickToCopyText}
+        </p>
+        {input && (
+            <button className="btn" onClick={transcode}>
+              {isProcessing && (
+                  <IconContext.Provider value={{className: "animate-spin"}}>
+                    <FaSpinner/>
+                  </IconContext.Provider>
+              )}
+              {isProcessing ? "Processing..." : "Convert"}
+            </button>
+        )}
+        <p className="my-4">
+          {progress}
+        </p>
+        {output &&
+            <div class="grid place-items-center">
+              <video controls src={output}/>
+            </div>
+        }
+        <dialog className="modal modal-bottom sm:modal-middle" ref={errorModalRef}>
+          <div className="modal-box border-solid border-2 border-red-500">
+            <h3 className="font-bold text-lg">Error!</h3>
+            <p className="py-4">{errorText}</p>
+            <p>Press ESC key or click the button below to close</p>
+            <div className="modal-action">
+              <form method="dialog">
+                <button className="btn">Close</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
+      </div>
   ) : (
-    <span>Loading...</span>
+      <span>Loading...</span>
   )
 }
 
