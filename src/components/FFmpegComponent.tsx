@@ -43,7 +43,7 @@ function FFmpegComponent() {
       setProgress(`Processing... complete: ${(progress * 100.0).toFixed(2)}% [Experimental]`)
     })
 
-    const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.2/dist/esm'
+    const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm'
 
     await ffmpeg.load({
       coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
